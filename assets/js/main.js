@@ -38,8 +38,70 @@ function loadPokemonItens(offset, limit) {
   });
 }
 
+function loadPokemonDetail(pokemon) {
+
+  detailContent.innerHTML = `
+    <div class="type ${pokemon.type}">
+    <img src="${pokemon.photo}" alt="${pokemon.name}">
+    <h1 class="name">${pokemon.name}  <span class="number">#${('00'+pokemon.number).slice(-3)}</span></h1>
+    <ol class="types">${pokemon.types
+                        .map((type) => `<li class="type ${type}">${type}</li>`)
+                        .join("")}
+    </ol>
+    <div class="pokemon-detail-footer">
+    <ul class="stats-container">
+      <h2>Stats</h2>
+      <li class="stats">
+        <p>Height</p>
+        <p>${parseInt(pokemon.height) / 10} m</p>
+      </li>
+      <li class="stats">
+        <p>Weight</p>
+        <p>${parseInt(pokemon.weight) / 10} kg</p>
+      </li>
+      ${Object.entries(pokemon.base_stats).map(([stats]) =>
+        `<li class='stats'>
+          <p>${stats}</p>
+          <p>${pokemon.base_stats[stats]}</p>
+        </li>`
+        ).join("")
+      }
+      
+    </ul>
+    </div>
+    `
+}
+
+document.addEventListener("click", function(e){
+  const target = e.target.closest("li");
+  let p_id;
+  try {
+    p_id = target.querySelector('.number');
+  } catch (e) {
+    return;
+  }
+
+  landPage.style.display = 'none';
+  detailPage.style.display = 'block';
+  p_id = p_id.innerHTML.substring(1);
+
+  loadPokemonDetail(pokeApi.getDetailsLocal(parseInt(p_id)));
+});
 
 loadPokemonItens(offset, limit);
+
+btnHome.addEventListener('click', () => {
+  landPage.style.display = 'block';
+  detailPage.style.display = 'none';
+})
+
+btnPreviousId.addEventListener('click', () => {
+  loadPokemonDetail(pokeApi.getDetailPrevious());
+});
+
+btnNextId.addEventListener('click', () => {
+  loadPokemonDetail(pokeApi.getDetailNext());
+});
 
 btnLoadMore.addEventListener('click', () => {
   offset += limit;
