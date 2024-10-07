@@ -1,7 +1,14 @@
 
 const btnLoadMore = document.getElementById('btnLoadMore');
+const btnPreviousId = document.getElementById('previous');
+const btnNextId = document.getElementById('next');
+const btnHome = document.getElementById('home-image');
 
 const pokemonOl = document.getElementById('pokemonList');
+const detailPage = document.getElementById('detail-page');
+const detailContent = document.getElementById('detail-content');
+
+const landPage = document.getElementById('land-page');
 
 const limit = 10;
 let offset = 0;
